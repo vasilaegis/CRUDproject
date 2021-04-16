@@ -1,0 +1,17 @@
+.form-card{
+    padding: 40px;
+    width: 50%;
+    margin-left: 25%;
+    box-shadow: 0 8px 4px 0 rgb(0, 0, 0 , 0.2);
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background: white;
+}
+
+input{
+    border: none;
+}
+
+body{
+    background: rgb(179, 227, 255) ;
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+</head>
+<body>
+    <div class="form-card">
+        <h3 class="text-info">FORM</h3>
+        <hr>
+        <form action="/form_submit" method="POST" enctype="multipart/form-data">
+        <label for="name">Name :</label>
+        <input class="form-control" type="text" name="name" id="name" placeholder="Enter your name" required><br>
+        <label for="name">Email :</label>
+        <input class="form-control" type="text" name="email" id="email" placeholder="Enter your email" required><br>
+        <label for="date">Birthdate :</label>
+        <input class="form-control" type="date" name="date" id="date" required><br>
+        <label for="date">Stream :</label>
+        <select class="form-control" name="stream" id="stream">
+            <option value="">select stream </option>
+            <option value="science">Science</option>
+            <option value="commerce">Commerce</option>
+            <option value="arts">Arts</option>
+        </select>
+        <br>
+        <label for="number">Mobile number :</label>
+        <input class="form-control" type="text" name="number" id="number" required placeholder="Enter your mobile number"><br>
+        <label for="gender">Gender :</label>
+        <input type="radio" name="gender" class="gender" value="male">male
+        <input type="radio" name="gender" class="gender" value="female">female <br>
+        <label for="number">Profile :</label>
+        <input class="form-control" type="file" name="file" id="file" ><br>
+        <button class="btn btn-outline-info">SUBMIT</button>
+        </form>
+    </div>
+    <br>
+    <div class="content-body">
+
+        <div class="container-fluid mt-3">
+          <div class="table-responsive">
+          <table id="example" class="display" style="width:100%">
+           <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Profile</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date</th>
+                <th scope="col">Stream</th>
+                <th scope="col">Mobile Number</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+           </thead>
+           <tbody>
+               
+            <% for(let i=2 ; i<data.length ; i++){ %>  
+            <tr>
+                <td><%= i-1 %></td>
+                <td><img width="50" src="<%= data[i].file.substring(7 , data[i].file.length) %>" alt=""></td>
+                <td><%= data[i].name %></td>
+                <td><%= data[i].email %></td>
+                <td><%= data[i].date.toISOString().split('T')[0] %></td>
+                <td><%= data[i].stream %></td>
+                <td><%= data[i].number %></td>
+                <td><%= data[i].gender %></td>
+                <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal<%= data[i]._id %>">
+                    Edit
+                  </button></td>
+                <td>
+                    <form action="/delete_product" method="POST">
+                        <input type="text" hidden value="<%= data[i]._id %>" name="delobj">
+                        <button id="btndel" class="btn btn-outline-danger">delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <% } %>
+           </tbody>
+           <tfoot>
+            <tr>
+                <th scope="col">#</th>
+                
+                <th scope="col">Profile</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date</th>
+                <th scope="col">Stream</th>
+                <th scope="col">Mobile Number</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+           </tfoot>
+          </table>
+          </div>
+
+        </div>
+    </div>
+
+  
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>     
+    <script>
+       $(document).ready(($)=>{
+           console.log("datatable>>>>>>>")
+           $.noConflict();
+           $("#example").DataTable();
+       })
+
+   </script>   
+
+       <% for(let i=2 ; i<data.length ; i++){ %> 
+        <!-- Modal -->
+  <div class="modal fade" id="exampleModal<%= data[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="/edit_data" method="POST" style="display: inline-block;">
+                <input type="text" hidden value="<%= data[i]._id %>" name="delobj">
+                <label for="name">Name :</label>
+                <input class="form-control" type="text" value="<%= data[i].name %>" name="name"><br>
+                <label for="name">Email :</label>
+                <input class="form-control" type="text" value="<%= data[i].email %>" name="email" id="email"><br>
+                <label for="date">Birthdate :</label>
+                <input class="form-control" type="date" value="<%= data[i].date.toISOString().split('T')[0] %>" name="date" id="date"><br>
+                <label for="number">Mobile number :</label>
+                <input class="form-control" type="text" value="<%= data[i].number %>" name="number" id="number">
+                <label for="stream">Stream : <span style="color: grey;">(science , commerce or arts)</span></label>
+                <input class="form-control" type="text" name="stream" value="<%= data[i].stream %>">
+                <br>
+                <button class="btn btn-info">Update</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+                <% } %> 
+</body>
+</html>
